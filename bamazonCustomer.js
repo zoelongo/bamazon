@@ -32,11 +32,34 @@ function promptPurchase(){
         var item = input.item_id;
         var quantity = input.quantity;
 
-        
+        var querySql = `SELECT * FROM products WHERE ?`;
 
+        connection.query(querySql, {item_id: item}, function(err, data){
+
+            if (err) throw err;
+
+            if (data.length === 0){
+
+                console.log("Please enter a valid ID.");
+
+            } else {
+
+                var productData = data[0];
+
+                if (quantity <= productData.quantity){
+
+                    var newQuerySql = `UPDATE products `
+                }
+
+
+
+                
+            }
+
+
+        })
 
     })
 
     
-
 }
