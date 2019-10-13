@@ -10,6 +10,22 @@ var connection = mysql.createConnection({
 
 });
 
+function validateInput(){
+
+    var integer = Number.isInteger(parseFloat(value));
+    var sign = Math.sign(value);
+
+    if (integer && (sign === 1)){
+
+        return true;
+
+    } else {
+
+        return `Please enter a valid whole integer.`
+
+    }
+}
+
 function promptPurchase(){
 
     inquirer.prompt([
@@ -18,12 +34,14 @@ function promptPurchase(){
             type: `input`,
             name: `item_id`,
             message: `Please enter the id of what you would like to purchase.`,
-            choices: [`cereal1`, `cereal2`, `cereal3`, `cereal4`, `cereal5`, `cereal6`, `cereal7`, `cereal8`]
+            validate: validateInput,
+            filter: Number
         },
         {
             type: `input`,
             name: `stock_quantity`,
             message: `How many would you like?`,
+            validate: validateInput,
             filter: Number
         }
 
