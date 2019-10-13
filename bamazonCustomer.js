@@ -46,20 +46,73 @@ function promptPurchase(){
 
                 var productData = data[0];
 
-                if (quantity <= productData.quantity){
+                if (quantity <= productData.stock_quantity){
 
-                    var newQuerySql = `UPDATE products `
-                }
+                    var newQuerySql = `UPDATE products SET stock_quantity = ` + (productData.stock_quantity - quantity) + ` WHERE item_id = ` + item;
 
+                    connection.query(newQuerySql, function(err, data){
 
+                        if (err) throw err;
 
+                        console.log(`Success! Your order was placed. Your total is $ ` + productData.price * quantity);
+                        console.log(`\n-----------------------------------------\n`);
+
+                        connection.end();
+
+                    }) 
+                    
+                } else {
+                        
+                    console.log(`Our apologies, there is not enough product in stock for your order to be placed!`);
+                    console.log(`\n-----------------------------------------\n`);
+                    console.log(`Feel free to modify your order and try again.`);
+
+                    displayInventory();
+
+                 }
                 
             }
-
 
         })
 
     })
-
-    
+   
 }
+
+function displayInventory(){
+
+    var queryStr = `SELECT * FROM products`;
+
+    connection.query(queryStr, function(err, data){
+
+        if (err) throw err;
+
+        console.log(`Here are our current cereals!`);
+
+        var cerealOutput = ``;
+
+        for (var i = 0; i < data.length; i++){
+
+            cerealOutput = ``;
+            cerealOutput += `Cereal ID: ` + data[i].item_id;
+            cerealOutput += `Cereal Name: ` + data[i].product_name;
+            cerealOutput += `Price: ` + data[i].price;
+
+            console.log(cerealOutput);
+
+        }
+
+        console.log(`\n-----------------------------------------\n`);
+
+        promptPurchase();
+
+    })
+}
+
+function runBamazon() {
+
+    displayInventory();
+
+}
+
+runBamazon();
