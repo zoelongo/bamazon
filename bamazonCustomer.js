@@ -106,6 +106,7 @@ function displayInventory(){
         if (err) throw err;
 
         console.log(`Here are our current cereals!`);
+    
 
         var cerealOutput = ``;
 
